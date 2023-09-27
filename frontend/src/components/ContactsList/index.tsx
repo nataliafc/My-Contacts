@@ -1,3 +1,4 @@
+import { Arrow } from "../../assets/icons/arrow-icon";
 import { Button } from "../Button";
 import { ContactCard } from "../ContactCard";
 import { ButtonsContainer, Container, ListHeader, Separator } from "./styles";
@@ -13,11 +14,20 @@ export const ContactsList = () => {
             <Separator />
 
             <ListHeader>
-                <strong>NOME</strong>
+                <div>
+                    <button type="button">
+                        <span>NOME</span>
+                        <Arrow />
+                    </button>
+                </div>
                 <strong>3 contatos encontrados</strong>
             </ListHeader>
 
-            <ContactCard />
+            <div>
+                <ContactCard />
+                <ContactCard />
+                <ContactCard />
+            </div>
         </Container>
     );
 };

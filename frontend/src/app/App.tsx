@@ -1,13 +1,11 @@
 import { ThemeProvider } from "styled-components";
-
 import GlobalStyles from "../assets/styles/global";
 import { theme } from "../assets/styles/theme/default";
 
-import { Container } from "./styles";
-
+import { Home } from "../pages/Home";
 import { Header } from "../components/Header";
 
-import { ContactsList } from "../components/ContactsList";
+import { Container } from "./styles";
 
 function App() {
     return (
@@ -15,7 +13,7 @@ function App() {
             <GlobalStyles />
             <Container>
                 <Header />
-                <ContactsList />
+                <Home />
             </Container>
         </ThemeProvider>
     );

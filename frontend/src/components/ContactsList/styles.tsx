@@ -8,15 +8,35 @@ export const Container = styled.div`
 `;
 
 export const ListHeader = styled.header`
+    width: 97%;
+
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
 
+    margin-bottom: 2vh;
+    margin-left: 0.4166666666666667vw;
+
     strong {
-        font-size: 1.7vmin;
+        font-size: 2vmin;
         font-style: normal;
         font-weight: 500;
         line-height: normal;
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        border: none;
+        background: transparent;
+    }
+
+    span {
+        margin-right: 0.4166666666666667vw;
+        font-weight: 700;
+        color: ${theme.buttonColors.primary};
+        font-size: 1.8vmin;
     }
 `;
 

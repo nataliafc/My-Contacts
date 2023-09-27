@@ -1,6 +1,8 @@
 export const theme = {
     colors: {
         backgroundColor: "#DCDCDC",
+        primary: "#385C85",
+        secondary: "#F19953",
     },
     buttonColors: {
         primary: "#385C85",
@@ -15,7 +17,10 @@ export const theme = {
     },
     fontColors: {
         primary: "#323131",
+        secondary: "#a4a4a4",
         button: "#EDF7F6",
+        title: "#385C85",
+        subtitle: "#e6eef7",
     },
     toastColors: {
         success: "#86AA4C",
