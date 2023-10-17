@@ -4,8 +4,21 @@ import { Edit } from "../../assets/icons/edit-icon";
 import { Trash } from "../../assets/icons/trash-icon";
 
 import { Container } from "./styles";
+import { formatPhone } from "../../utils/formatPhone";
 
-export const ContactCard = () => {
+type ContactInformationType = {
+    name: string;
+    category: string;
+    email: string;
+    phone: string;
+};
+
+export const ContactCard = ({
+    name,
+    category,
+    email,
+    phone,
+}: ContactInformationType) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -13,11 +26,11 @@ export const ContactCard = () => {
         <Container>
             <div className="contact-information">
                 <div className="contact-name">
-                    <strong>Nome do Contato</strong>
-                    <small>instagram</small>
+                    <strong>{ name }</strong>
+                    { category && <small>{category}</small> }
                 </div>
-                <span>email@email.com</span>
-                <span>(99)9999-9999</span>
+                <span>{ email }</span>
+                <span>{ formatPhone(phone) }</span>
             </div>
             <div className="actions">
                 {/* <Edit onClick={setOpenEditModal(!openEditModal)}/>

@@ -3,7 +3,7 @@ import GlobalStyles from "../assets/styles/global";
 import { theme } from "../assets/styles/theme/default";
 
 import { Home } from "../pages/Home";
-import { Header } from "../components/Header";
+// import { Header } from "../components/Header";
 
 import { Container } from "./styles";
 
@@ -12,7 +12,6 @@ function App() {
         <ThemeProvider theme={theme}>
             <GlobalStyles />
             <Container>
-                <Header />
                 <Home />
             </Container>
         </ThemeProvider>
