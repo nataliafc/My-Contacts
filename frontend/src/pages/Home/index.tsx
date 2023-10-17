@@ -1,20 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ContactsList } from "../../components/ContactsList";
-import { Input } from "../../components/Input";
-import { Select } from "../../components/Select";
-import { InputSearchContainer } from "./styles";
+// import { Loader } from "../../components/Loader";
+// import { FormModal } from "../../components/ModalForm";
+// import { DeleteModal } from "../../components/DeleteModal";
 
 export const Home = () => {
     return (
         <>
-            <InputSearchContainer>
-                <Input type="text" placeholder="Pesquisar..." />
-            </InputSearchContainer>
+            {/* <Loader /> */}
             <ContactsList />
-            <Select>
-                <option>Instagram</option>
-                <option>Linkedin</option>
-                <option>Orkut</option>
-            </Select>
+
+            {/* <FormModal /> */}
+            {/* <DeleteModal/> */}
         </>
     );
 };
+
+fetch('http://localhost:3002/contacts')
+.then(response => console.log(response))
+.catch(error => console.log(error))

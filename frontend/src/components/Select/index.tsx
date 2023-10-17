@@ -18,9 +18,7 @@ export const Select = styled.select`
         color: #bcbcbc;
     }
 
-    .form-select {
-        &:focus {
-            border: 2px solid ${theme.colors.secondary};
-        }
+    &:focus {
+        border: 2px solid ${theme.colors.secondary};
     }
 `;

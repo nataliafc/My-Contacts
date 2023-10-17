@@ -4,6 +4,7 @@ const CategoriesController = require('./app/controllers/CategoriesController')
 
 const router = express.Router()
 
+router.get('/', ContactsController.listAllContacts)
 router.get('/contacts', ContactsController.listAllContacts)
 router.get('/contacts/:id', ContactsController.listContactById)
 router.post('/contacts', ContactsController.createContact)

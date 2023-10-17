@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes } from "react";
 import { Container } from "./styles";
 
 interface Props extends ButtonHTMLAttributes<any> {
-    text?: string | undefined;
+    text: string;
     secondary?: boolean;
     weight?: number;
     vertical?: string;
@@ -13,7 +13,7 @@ interface Props extends ButtonHTMLAttributes<any> {
     width?: string;
     height?: string;
     onClick?: () => void;
-    alternativeColor?: string;
+    alternativeColor?: boolean;
     fontSize?: string;
 }
 
@@ -44,8 +44,8 @@ export const Button = ({
                 fontStyle: "normal",
                 fontWeight: weight ?? 500,
             }}
-            text={text}
-            secondary={secondary}
+            $text={text}
+            $secondary={secondary}
             weight={weight}
             vertical={vertical}
             horizontal={horizontal}
@@ -56,7 +56,7 @@ export const Button = ({
             fontSize={fontSize}
         >
             <span
-                style={{ visibility: loading === true ? "hidden" : "visible" }}
+                style={{  width: '100%', visibility: loading === true ? "hidden" : "visible" }}
             >
                 {text}
             </span>

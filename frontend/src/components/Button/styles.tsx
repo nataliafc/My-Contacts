@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { theme } from "../../assets/styles/theme/default";
 
 interface Props extends ButtonHTMLAttributes<any> {
-    text?: string | undefined;
-    secondary?: boolean;
+    $text: string;
+    $secondary?: boolean;
     weight?: number;
     vertical?: string;
     horizontal?: string;
@@ -13,7 +13,7 @@ interface Props extends ButtonHTMLAttributes<any> {
     width?: string;
     height?: string;
     onClick?: () => void;
-    alternativeColor?: string;
+    alternativeColor?: boolean;
     fontSize?: string;
 }
 
@@ -22,7 +22,7 @@ export const Container = styled.button<Props>`
     align-items: center;
     justify-content: center;
 
-    width: ${(p) => (p.width ? p.width : "auto")};
+    width: ${(p) => (p.width ? p.width : "100%")};
     height: ${(p) => (p.height ? p.height : "auto")};
 
     appearance: none;
@@ -33,15 +33,11 @@ export const Container = styled.button<Props>`
     background-color: ${(p) =>
         p.disabled
             ? theme.buttonColors.disabled
-            : p.secondary
+            : p.$secondary
             ? theme.buttonColors.secondary
-            : theme.buttonColors.primary};
-    ${(p) =>
-        p.disabled
-            ? theme.buttonColors.disabled
             : p.alternativeColor
             ? theme.buttonColors.alternative
-            : null}
+            : theme.buttonColors.primary};
 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     cursor: ${(p) => (p.disabled ? "not-allowed" : "pointer")};
@@ -51,10 +47,11 @@ export const Container = styled.button<Props>`
         background-color: ${(p) =>
             p.disabled
                 ? theme.buttonColors.disabled
-                : p.secondary
+                : p.$secondary
                 ? theme.hoverColors.secondary
+                : p.alternativeColor
+                ? theme.hoverColors.alternative
                 : theme.hoverColors.primary};
-        ${(p) => (p.alternativeColor ? theme.hoverColors.alternative : null)}
 
         transition: all 0.3s ease-in-out;
     }
@@ -62,7 +59,7 @@ export const Container = styled.button<Props>`
     span {
         font-size: 1.7vmin;
         color: ${theme.fontColors.button};
-        ${(p) => (p.alternativeColor ? theme.buttonColors.primary : null)}
+        color: ${(p) => (p.alternativeColor ? theme.buttonColors.primary : null)};
 
         padding: ${(p) => (p.vertical ? p.vertical : "1vh")};
         ${(p) => (p.horizontal ? p.horizontal : "1vw")};

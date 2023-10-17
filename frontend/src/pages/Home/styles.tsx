@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const InputSearchContainer = styled.div`
     width: 100%;
-    /* margin-top: 5.100956429330499vh; */
 
-    input {
+    /* input {
         width: 100%;
         height: 4.463336875664187vh;
         border: none;
@@ -17,5 +16,5 @@ export const InputSearchContainer = styled.div`
         &::placeholder {
             color: #bcbcbc;
         }
-    }
+    } */
 `;

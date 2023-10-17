@@ -1,12 +1,16 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { theme } from "../../assets/styles/theme/default";
 
-export const Input = styled.input`
+type props = {
+    error?: boolean;
+};
+
+export const Input = styled.input<props>`
     width: 100%;
     height: 4.463336875664187vh;
 
-    border: 2px solid #fff;
     border-radius: 8px;
+    border: 2px solid #fff;
     outline: none;
 
     padding: 0px 16px;
@@ -18,9 +22,14 @@ export const Input = styled.input`
         color: #bcbcbc;
     }
 
-    .form-input {
-        &:focus {
-            border: 2px solid ${theme.colors.secondary};
-        }
+    &:focus {
+        border: 2px solid ${theme.colors.secondary};
     }
+
+    ${({ error }) =>
+        error &&
+        css`
+        color: ${theme.toastColors.error};
+        border: 2px solid ${theme.toastColors.error};
+    `}
 `;
