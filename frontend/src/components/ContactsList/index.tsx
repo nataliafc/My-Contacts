@@ -1,40 +1,94 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useMemo, useState } from "react";
 
 import isValidProp from "@emotion/is-prop-valid";
 import { StyleSheetManager } from "styled-components";
 
 import { Arrow } from "../../assets/icons/arrow-icon";
+
+import { Input } from "../Input";
 import { Button } from "../Button";
+import { Loader } from "../Loader";
 import { ContactCard } from "../ContactCard";
-import { ButtonsContainer, Container, ListHeader, Separator } from "./styles";
-import { useEffect, useState } from "react";
+
+import ContactsService from "../../services/ContactsService";
+
+import {
+    ButtonsContainer,
+    Container,
+    InputContainer,
+    ListHeader,
+    Separator,
+} from "./styles";
+
+type ContactType = {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    category_id: string;
+}[];
 
 export const ContactsList = () => {
-    const [contacts, setContacts] = useState<any>([]);
+    const [contacts, setContacts] = useState<ContactType>([]);
     const [orderBy, setOrderBy] = useState("asc");
+    const [isLoading, setIsLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
 
+    const filteredContacts = useMemo(
+        () =>
+            contacts.filter((contact: any) =>
+                contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+            ),
+        [contacts, searchTerm]
+    );
+
+    // useEffect não pode ser assíncrono, deve sempre ser uma função síncrona
+    // mas pode possuir uma função assíncrona dentro dele
+
+    // o try / catch é o meio de pegar erros disparados em um async/await
     useEffect(() => {
-        fetch(`http://localhost:3002/contacts?orderBy=${orderBy}`, {
-            method: "GET",
-            headers: new Headers({
-                "X-App-ID": "123",
-            }),
-        })
-            .then(async (response) => {
-                const json = await response.json();
-                setContacts(json);
-            })
+        async function loadContacts() {
+            try {
+                const contactsList = await ContactsService.listContacts(orderBy);
+                setContacts(contactsList);
+                setIsLoading(true);
 
-            .catch((error) => console.log(error));
+            } catch (error) {
+                // erros de cors, response.json, erros de comunicação da fetch, erro que o httpclient ta lançando
+                console.log(error);
+
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
+        loadContacts();
     }, [orderBy]);
 
-    const handleToggleOrderBy = () => {
+    function handleToggleOrderBy() {
         setOrderBy((prevState) => (prevState === "asc" ? "desc" : "asc"));
-    };
+    }
+
+    function handleSearchTerm(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearchTerm(e.target.value);
+    }
 
     return (
         <StyleSheetManager shouldForwardProp={(text) => isValidProp(text)}>
             <Container>
+                <Loader isLoading={isLoading} />
+
+                <InputContainer>
+                    <Input
+                        name="search-bar"
+                        type="text"
+                        placeholder="Pesquisar..."
+                        value={searchTerm}
+                        onChange={handleSearchTerm}
+                    />
+                </InputContainer>
+
                 <ButtonsContainer>
                     <Button
                         width="10vw"
@@ -46,32 +100,35 @@ export const ContactsList = () => {
                     <Button
                         width="10vw"
                         text="CRIAR CATEGORIA"
+                        secondary
                         onClick={() =>
                             console.log("abre modal de nova categoria")
                         }
-                        secondary
                     />
                 </ButtonsContainer>
 
                 <Separator />
 
-                <ListHeader >
-                    <div>
-                        <button type="button" onClick={handleToggleOrderBy}>
-                            <span>NOME</span>
-                            <Arrow orderBy={orderBy}/>
-                        </button>
-                    </div>
+                <ListHeader>
+                    {filteredContacts.length < 1 ? null : (
+                        <div>
+                            <button type="button" onClick={handleToggleOrderBy}>
+                                <span>NOME</span>
+                                <Arrow orderBy={orderBy} />
+                            </button>
+                        </div>
+                    )}
+
                     <strong>
-                        {contacts.length}
-                        {contacts.length === 1
+                        {filteredContacts.length}
+                        {filteredContacts.length === 1
                             ? " contato encontrado"
                             : " contatos encontrados"}
                     </strong>
                 </ListHeader>
 
                 <div>
-                    {contacts.map((contact: any) => (
+                    {filteredContacts.map((contact: any) => (
                         <ContactCard
                             key={contact.id}
                             name={contact.name}

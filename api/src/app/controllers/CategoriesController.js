@@ -5,17 +5,16 @@ class CategoriesController {
         const { orderBy } = request.query
         const categories = await CategoriesRepository.findAll(orderBy);
 
-        response.json(categories);
+        response.status(200).json(categories);
     }
 
     async listCategoryById(request, response) {
         const { id } = request.params;
         const category = await CategoriesRepository.findById(id);
-
         if (!category) {
             return response.status(404).json({ error: "Category not found" });
         }
-        return response.json(category);
+        response.status(200).json(category);
     }
 
     async createCategory(request, response) {
@@ -34,7 +33,7 @@ class CategoriesController {
         }
 
         const category = await CategoriesRepository.create({ name });
-        return response.json(category);
+        response.status(201).json(category);
     }
 
     async updateCategory(request, response) {
@@ -57,7 +56,7 @@ class CategoriesController {
         }
 
         const category = await CategoriesRepository.update(id, { name });
-        return response.json(category);
+        response.status(200).json(category);
     }
 
     async deleteCategory(request, response) {

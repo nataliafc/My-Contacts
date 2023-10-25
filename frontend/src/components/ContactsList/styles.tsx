@@ -64,3 +64,9 @@ export const ButtonsContainer = styled.div`
     margin-top: -2.1253985122210413vh;
     margin-bottom: 2.1253985122210413vh;
 `;
+
+export const InputContainer = styled.div`
+    display: flex;
+    width: 100%;
+    margin-bottom: 4.5253985122210413vh;
+`;

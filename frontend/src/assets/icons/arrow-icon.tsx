@@ -1,7 +1,7 @@
 
 
 type props = {
-    orderBy: string;
+    orderBy?: string;
 };
 
 export function Arrow({ orderBy }: props) {
@@ -13,7 +13,7 @@ export function Arrow({ orderBy }: props) {
                 width={14}
                 height={19}
                 fill="none"
-                style={{ transform: "rotate(0deg)", transition: "transform 0.5s ease-in" }}
+                style={{ transform: "rotate(0deg)", transition: "transform 0.2s ease-in" }}
             >
                 <path
                     stroke="#385C85"
@@ -31,7 +31,7 @@ export function Arrow({ orderBy }: props) {
                 width={14}
                 height={19}
                 fill="none"
-                style={{ transform: "rotate(180deg)", transition: "transform 0.5s ease-in" }}
+                style={{ transform: "rotate(180deg)", transition: "transform 0.2s ease-in" }}
             >
                 <path
                     stroke="#385C85"
@@ -44,3 +44,6 @@ export function Arrow({ orderBy }: props) {
         );
     }
 }
+
+
+// ALTERAR FONTES PARA POPPINS
