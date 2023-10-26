@@ -27,7 +27,7 @@ import {
     TextError,
 } from "./styles";
 import { theme } from "../../assets/styles/theme/default";
-
+import { FormModal } from "../ModalForm";
 
 type ContactType = {
     id: string;
@@ -43,6 +43,8 @@ export const ContactsList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [hasError, setHasError] = useState(false);
+    const [contactModalOpen, setContactModalOpen] = useState(false);
+    const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
     const filteredContacts = useMemo(
         () =>
@@ -63,20 +65,18 @@ export const ContactsList = () => {
     const loadContacts = useCallback(async () => {
         setIsLoading(true);
         try {
-
-            const contactsList: any[] = await ContactsService.listContacts(orderBy);
+            const contactsList: any[] = await ContactsService.listContacts(
+                orderBy
+            );
             setContacts(contactsList);
             setHasError(false);
-
         } catch (error: any) {
             setHasError(true);
             console.log(error);
-
         } finally {
             setIsLoading(false);
         }
-
-    }, [orderBy])
+    }, [orderBy]);
 
     useEffect(() => {
         loadContacts();
@@ -91,7 +91,11 @@ export const ContactsList = () => {
     }
 
     function handleTryAgain() {
-        loadContacts()
+        loadContacts();
+    }
+
+    function handleOpenNewContactModal() {
+        setContactModalOpen(true);
     }
 
     return (
@@ -99,7 +103,7 @@ export const ContactsList = () => {
             <Container>
                 <Loader isLoading={isLoading} />
 
-                { contacts.length > 0 &&
+                {contacts.length > 0 && (
                     <InputContainer>
                         <Input
                             name="search-bar"
@@ -109,15 +113,13 @@ export const ContactsList = () => {
                             onChange={handleSearchTerm}
                         />
                     </InputContainer>
-                }
+                )}
 
                 <ButtonsContainer>
                     <Button
                         width="10vw"
                         text="CRIAR CONTATO"
-                        onClick={() =>
-                            console.log("abre modal de novo contato")
-                        }
+                        onClick={handleOpenNewContactModal}
                     />
                     <Button
                         width="10vw"
@@ -133,74 +135,113 @@ export const ContactsList = () => {
 
                 {!hasError && (
                     <>
-                        { contacts.length < 1 && !isLoading ? (
+                        {contacts.length < 1 && !isLoading ? (
                             <NoContactsContainer>
                                 <EmptyBox />
-                                <span> Você ainda não possui nenhum contato cadastrado.
-                                    Clique no botão <strong>CRIAR CONTATO</strong> para cadastrar o primeiro!</span>
+                                <span>
+                                    {" "}
+                                    Você ainda não possui nenhum contato
+                                    cadastrado. Clique no botão{" "}
+                                    <strong>CRIAR CONTATO</strong> para
+                                    cadastrar o primeiro!
+                                </span>
                             </NoContactsContainer>
-                        ) : null  }
+                        ) : null}
 
-                    <ListHeader>
-                        { !hasError || (filteredContacts.length > 0) ? null : (
-                            <div>
-                                <button type="button" onClick={handleToggleOrderBy}>
-                                    <span>NOME</span>
-                                    <Arrow orderBy={orderBy} />
-                                </button>
-                            </div>
-                        )}
-
-                        { contacts.length > 0 && (filteredContacts.length > 1) && (
-                             <strong>
-                             {filteredContacts.length}
-                             {filteredContacts.length === 1
-                                 ? " contato encontrado"
-                                 : " contatos encontrados"}
-                         </strong>
-                        )}
-
-                        { contacts.length > 0 && (filteredContacts.length < 1) &&
-                             <div style={{ display: 'flex', marginTop: '3vh', marginLeft: '1.5vw', alignItems: 'flex-start', justifyContent: 'center' }}>
+                        <ListHeader>
+                            {!hasError || filteredContacts.length > 0 ? null : (
                                 <div>
-                                    <Magnifier/>
+                                    <button
+                                        type="button"
+                                        onClick={handleToggleOrderBy}
+                                    >
+                                        <span>NOME</span>
+                                        <Arrow orderBy={orderBy} />
+                                    </button>
                                 </div>
-                                <span style={{ display: 'flex', marginLeft: '1vw', color: `${theme.fontColors.secondary}`, fontWeight: 500, fontSize: '1.8vmin', wordBreak: 'break-word'}}>Nenhum resultado encontrado para "{searchTerm}"</span>
-                            </div>
-                        }
+                            )}
 
-                    </ListHeader>
+                            {contacts.length > 0 &&
+                                filteredContacts.length > 1 && (
+                                    <strong>
+                                        {filteredContacts.length}
+                                        {filteredContacts.length === 1
+                                            ? " contato encontrado"
+                                            : " contatos encontrados"}
+                                    </strong>
+                                )}
 
-                    <div>
-                        {filteredContacts.map((contact: any) => (
-                            <ContactCard
-                                key={contact.id}
-                                name={contact.name}
-                                email={contact.email}
-                                phone={contact.phone}
-                                category={contact.category_name}
-                            />
-                        ))}
-                    </div>
+                            {contacts.length > 0 &&
+                                filteredContacts.length < 1 && (
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            marginTop: "3vh",
+                                            marginLeft: "1.5vw",
+                                            alignItems: "flex-start",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        <div>
+                                            <Magnifier />
+                                        </div>
+                                        <span
+                                            style={{
+                                                display: "flex",
+                                                marginLeft: "1vw",
+                                                color: `${theme.fontColors.secondary}`,
+                                                fontWeight: 500,
+                                                fontSize: "1.8vmin",
+                                                wordBreak: "break-word",
+                                            }}
+                                        >
+                                            Nenhum resultado encontrado para "
+                                            {searchTerm}"
+                                        </span>
+                                    </div>
+                                )}
+                        </ListHeader>
 
+                        <div>
+                            {filteredContacts.map((contact: any) => (
+                                <ContactCard
+                                    key={contact.id}
+                                    name={contact.name}
+                                    email={contact.email}
+                                    phone={contact.phone}
+                                    category={contact.category_name}
+                                />
+                            ))}
+                        </div>
                     </>
                 )}
 
-                { hasError &&
-                <ErrorContainer>
-                    <SadFace />
-                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '30px', alignItems: 'center', gap: 20 }}>
-                        <TextError>Ocorreu um erro ao buscar seus contatos!</TextError>
-                        <Button
-                            ghostButton
-                            width="12vw"
-                            text="TENTE NOVAMENTE"
-                            onClick={ handleTryAgain }
-                        />
-                    </div>
-                </ErrorContainer> }
-
+                {hasError && (
+                    <ErrorContainer>
+                        <SadFace />
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                marginLeft: "30px",
+                                alignItems: "center",
+                                gap: 20,
+                            }}
+                        >
+                            <TextError>
+                                Ocorreu um erro ao buscar seus contatos!
+                            </TextError>
+                            <Button
+                                ghostButton
+                                width="12vw"
+                                text="TENTE NOVAMENTE"
+                                onClick={handleTryAgain}
+                            />
+                        </div>
+                    </ErrorContainer>
+                )}
             </Container>
+            <FormModal />
         </StyleSheetManager>
     );
 };

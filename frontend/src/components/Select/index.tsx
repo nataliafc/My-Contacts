@@ -21,4 +21,9 @@ export const Select = styled.select`
     &:focus {
         border: 2px solid ${theme.colors.secondary};
     }
+
+    &[disabled] {
+        border-color: ${theme.buttonColors.disabled};
+        background-color: ${theme.buttonColors.disabled};
+    }
 `;

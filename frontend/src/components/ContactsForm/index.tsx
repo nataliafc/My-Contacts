@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
 import { Button } from "../Button";
 import { FormGroup } from "../FormGroup";
 import { Input } from "../Input";
@@ -10,15 +11,43 @@ import { useErrors } from "../../hooks/useErrors";
 import isEmailValid from "../../utils/isEmailValid";
 import { formatPhone } from "../../utils/formatPhone";
 
-export const ContactsForm = () => {
+import CategoriesService from "../../services/CategoriesService";
+
+type CategoryType = {
+    id: string;
+    name: string
+}
+
+
+export const ContactsForm = ( ) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [category, setCategory] = useState("");
+    const [categoryId, setCategoryId] = useState("");
+    const [categories, setCategories] = useState([]);
+    const [isLoadingCategories, setIsLoadingCategories] = useState(true)
 
     const { setError, removeError, getErrorMessageByFieldName, errors } = useErrors();
-
     const isFormValid = (name && errors.length === 0);
+
+
+    const loadCategories = useCallback(async () => {
+
+        try {
+            const categoriesList = await CategoriesService.listCategories();
+            setCategories(categoriesList)
+            console.log(categoriesList)
+        }
+        catch(error) {
+            console.log(error)
+        } finally {
+            setIsLoadingCategories(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        loadCategories()
+    }, [loadCategories])
 
     const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -51,17 +80,14 @@ export const ContactsForm = () => {
             name,
             email,
             phone: phone.replace(/\D/g, ''),
-            category,
+            categoryId,
         });
     };
-
-    console.log(errors)
 
     return (
         <Form autoComplete="off" onSubmit={handleSubmit}>
             <FormGroup error={getErrorMessageByFieldName("name")} >
                 <Input
-                    name="name"
                     value={name}
                     placeholder="Nome"
                     autoComplete="off"
@@ -72,7 +98,6 @@ export const ContactsForm = () => {
 
             <FormGroup error={getErrorMessageByFieldName("email")}>
                 <Input
-                    name="email"
                     type="email"
                     value={email}
                     autoComplete="off"
@@ -84,7 +109,6 @@ export const ContactsForm = () => {
 
             <FormGroup>
                 <Input
-                    name="phone"
                     value={phone}
                     autoComplete="off"
                     placeholder="Telefone"
@@ -93,16 +117,20 @@ export const ContactsForm = () => {
                 />
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup isLoading={isLoadingCategories}>
                 <Select
-                    name="categories"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                    disabled={isLoadingCategories}
                 >
-                    <option value="">Categoria</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="linkedin">Linkedin</option>
-                    <option value="orkut">Orkut</option>
+                    <option value="">Sem categoria</option>
+                    { categories.map((category: CategoryType) => (
+                        <option
+                            key={category.id}
+                            value={category.id}>
+                                {category.name}
+                        </option>
+                    ))}
                 </Select>
             </FormGroup>
 
