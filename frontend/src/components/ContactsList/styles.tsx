@@ -50,6 +50,20 @@ export const Separator = styled.div`
     margin-bottom: 1.2752391073326248vh;
 `;
 
+export const NoContactsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10vh;
+    gap: 4vh;
+    text-align: center;
+    span {
+        color: ${theme.fontColors.primary};
+        font-size: 1.8vmin;
+    }
+`;
+
 export const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -81,4 +95,3 @@ export const TextError = styled.strong`
     color: ${theme.toastColors.error};
     font-size: 1.8vmin;
 `;
-

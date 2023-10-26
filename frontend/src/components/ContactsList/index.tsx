@@ -6,6 +6,8 @@ import { StyleSheetManager } from "styled-components";
 
 import { Arrow } from "../../assets/icons/arrow-icon";
 import { SadFace } from "../../assets/icons/sad-face";
+import { EmptyBox } from "../../assets/icons/empty-box";
+import { Magnifier } from "../../assets/icons/magnifier-question";
 
 import { Input } from "../Input";
 import { Button } from "../Button";
@@ -20,9 +22,11 @@ import {
     ErrorContainer,
     InputContainer,
     ListHeader,
+    NoContactsContainer,
     Separator,
     TextError,
 } from "./styles";
+import { theme } from "../../assets/styles/theme/default";
 
 
 type ContactType = {
@@ -59,7 +63,8 @@ export const ContactsList = () => {
     const loadContacts = useCallback(async () => {
         setIsLoading(true);
         try {
-            const contactsList = await ContactsService.listContacts(orderBy);
+
+            const contactsList: any[] = await ContactsService.listContacts(orderBy);
             setContacts(contactsList);
             setHasError(false);
 
@@ -94,15 +99,17 @@ export const ContactsList = () => {
             <Container>
                 <Loader isLoading={isLoading} />
 
-                <InputContainer>
-                    <Input
-                        name="search-bar"
-                        type="text"
-                        placeholder="Pesquisar..."
-                        value={searchTerm}
-                        onChange={handleSearchTerm}
-                    />
-                </InputContainer>
+                { contacts.length > 0 &&
+                    <InputContainer>
+                        <Input
+                            name="search-bar"
+                            type="text"
+                            placeholder="Pesquisar..."
+                            value={searchTerm}
+                            onChange={handleSearchTerm}
+                        />
+                    </InputContainer>
+                }
 
                 <ButtonsContainer>
                     <Button
@@ -124,25 +131,60 @@ export const ContactsList = () => {
 
                 <Separator />
 
-                <ListHeader>
-                    { filteredContacts.length < 1 ? null : (
-                        <div>
-                            <button type="button" onClick={handleToggleOrderBy}>
-                                <span>NOME</span>
-                                <Arrow orderBy={orderBy} />
-                            </button>
-                        </div>
-                    )}
+                {!hasError && (
+                    <>
+                        { contacts.length < 1 && !isLoading ? (
+                            <NoContactsContainer>
+                                <EmptyBox />
+                                <span> Você ainda não possui nenhum contato cadastrado.
+                                    Clique no botão <strong>CRIAR CONTATO</strong> para cadastrar o primeiro!</span>
+                            </NoContactsContainer>
+                        ) : null  }
 
-                    { !hasError && (
-                        <strong>
-                            {filteredContacts.length}
-                            {filteredContacts.length === 1
-                                ? " contato encontrado"
-                                : " contatos encontrados"}
-                        </strong>
-                    )}
-                </ListHeader>
+                    <ListHeader>
+                        { !hasError || (filteredContacts.length > 0) ? null : (
+                            <div>
+                                <button type="button" onClick={handleToggleOrderBy}>
+                                    <span>NOME</span>
+                                    <Arrow orderBy={orderBy} />
+                                </button>
+                            </div>
+                        )}
+
+                        { contacts.length > 0 && (filteredContacts.length > 1) && (
+                             <strong>
+                             {filteredContacts.length}
+                             {filteredContacts.length === 1
+                                 ? " contato encontrado"
+                                 : " contatos encontrados"}
+                         </strong>
+                        )}
+
+                        { contacts.length > 0 && (filteredContacts.length < 1) &&
+                             <div style={{ display: 'flex', marginTop: '3vh', marginLeft: '1.5vw', alignItems: 'flex-start', justifyContent: 'center' }}>
+                                <div>
+                                    <Magnifier/>
+                                </div>
+                                <span style={{ display: 'flex', marginLeft: '1vw', color: `${theme.fontColors.secondary}`, fontWeight: 500, fontSize: '1.8vmin', wordBreak: 'break-word'}}>Nenhum resultado encontrado para "{searchTerm}"</span>
+                            </div>
+                        }
+
+                    </ListHeader>
+
+                    <div>
+                        {filteredContacts.map((contact: any) => (
+                            <ContactCard
+                                key={contact.id}
+                                name={contact.name}
+                                email={contact.email}
+                                phone={contact.phone}
+                                category={contact.category_name}
+                            />
+                        ))}
+                    </div>
+
+                    </>
+                )}
 
                 { hasError &&
                 <ErrorContainer>
@@ -158,22 +200,6 @@ export const ContactsList = () => {
                     </div>
                 </ErrorContainer> }
 
-                {
-                    !hasError &&
-                    <div>
-                        {filteredContacts.map((contact: any) => (
-                            <ContactCard
-                                key={contact.id}
-                                name={contact.name}
-                                email={contact.email}
-                                phone={contact.phone}
-                                category={contact.category_name}
-                            />
-                        ))}
-                    </div>
-
-
-                }
             </Container>
         </StyleSheetManager>
     );
