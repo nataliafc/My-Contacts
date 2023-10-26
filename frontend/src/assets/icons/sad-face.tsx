@@ -5,6 +5,7 @@ export const SadFace = (props: SVGProps<SVGSVGElement>) => (
         width={90}
         height={90}
         fill="none"
+        viewBox="0 0 100 100"
         {...props}
     >
         <path

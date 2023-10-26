@@ -3,9 +3,10 @@ import { SVGProps } from "react";
 export const Trash = (props: SVGProps<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        width={20}
-        height={22}
+        width="150%"
+        height="150%"
         fill="none"
+        viewBox="0 0 50 30"
         {...props}
     >
         <g opacity={0.6}>

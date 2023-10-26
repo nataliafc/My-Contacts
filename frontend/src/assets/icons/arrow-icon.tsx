@@ -12,6 +12,7 @@ export function Arrow({ orderBy }: props) {
                 xmlns="http://www.w3.org/2000/svg"
                 width={14}
                 height={19}
+                viewBox="0 0 20 20"
                 fill="none"
                 style={{ transform: "rotate(0deg)", transition: "transform 0.2s ease-in" }}
             >
@@ -31,6 +32,7 @@ export function Arrow({ orderBy }: props) {
                 width={14}
                 height={19}
                 fill="none"
+                viewBox="0 0 20 20"
                 style={{ transform: "rotate(180deg)", transition: "transform 0.2s ease-in" }}
             >
                 <path

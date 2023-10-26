@@ -7,7 +7,7 @@ class ContactsService {
         this.httpClient = new HttpClient(`http://localhost:3002`);
     }
     async listContacts(orderBy = "asc") {
-        return this.httpClient.get(`/conatacts?orderBy=${orderBy}`);
+        return this.httpClient.get(`/contacts?orderBy=${orderBy}`);
     }
     async listContactById(id: string) {
         return this.httpClient.get(`/contacts/${id}`);

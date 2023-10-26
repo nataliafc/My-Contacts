@@ -6,6 +6,7 @@ import { Container } from "./styles";
 interface Props extends ButtonHTMLAttributes<any> {
     text: string;
     secondary?: boolean;
+    ghostButton?: boolean;
     weight?: number;
     vertical?: string;
     horizontal?: string;
@@ -20,6 +21,7 @@ interface Props extends ButtonHTMLAttributes<any> {
 export const Button = ({
     text,
     secondary,
+    ghostButton,
     weight,
     vertical,
     horizontal,
@@ -46,6 +48,7 @@ export const Button = ({
             }}
             $text={text}
             $secondary={secondary}
+            ghostButton={ghostButton}
             weight={weight}
             vertical={vertical}
             horizontal={horizontal}

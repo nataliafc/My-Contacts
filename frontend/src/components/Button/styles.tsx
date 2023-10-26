@@ -7,6 +7,7 @@ interface Props extends ButtonHTMLAttributes<any> {
     $text: string;
     $secondary?: boolean;
     weight?: number;
+    ghostButton?: boolean;
     vertical?: string;
     horizontal?: string;
     loading?: boolean;
@@ -30,12 +31,16 @@ export const Container = styled.button<Props>`
     border-radius: 4px;
     outline: none;
 
+    border: ${(p) => (p.ghostButton ? `2px solid ${theme.fontColors.title}` : null)};
+
     background-color: ${(p) =>
         p.disabled
             ? theme.buttonColors.disabled
             : p.$secondary
             ? theme.buttonColors.secondary
             : p.alternativeColor
+            ? theme.buttonColors.alternative
+            : p.ghostButton
             ? theme.buttonColors.alternative
             : theme.buttonColors.primary};
 
@@ -51,15 +56,18 @@ export const Container = styled.button<Props>`
                 ? theme.hoverColors.secondary
                 : p.alternativeColor
                 ? theme.hoverColors.alternative
+                : p.ghostButton
+                ? theme.fontColors.subtitle
                 : theme.hoverColors.primary};
 
-        transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-out;
     }
 
     span {
         font-size: 1.7vmin;
         color: ${theme.fontColors.button};
         color: ${(p) => (p.alternativeColor ? theme.buttonColors.primary : null)};
+        color: ${(p) => (p.ghostButton ? theme.fontColors.title : null)};
 
         padding: ${(p) => (p.vertical ? p.vertical : "1vh")};
         ${(p) => (p.horizontal ? p.horizontal : "1vw")};

@@ -70,3 +70,15 @@ export const InputContainer = styled.div`
     width: 100%;
     margin-bottom: 4.5253985122210413vh;
 `;
+
+export const ErrorContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const TextError = styled.strong`
+    color: ${theme.toastColors.error};
+    font-size: 1.8vmin;
+`;
+
