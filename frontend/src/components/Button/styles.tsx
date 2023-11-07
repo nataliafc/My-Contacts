@@ -31,7 +31,8 @@ export const Container = styled.button<Props>`
     border-radius: 4px;
     outline: none;
 
-    border: ${(p) => (p.ghostButton ? `2px solid ${theme.fontColors.title}` : null)};
+    border: ${(p) =>
+        p.ghostButton ? `2px solid ${theme.fontColors.title}` : null};
 
     background-color: ${(p) =>
         p.disabled
@@ -64,9 +65,14 @@ export const Container = styled.button<Props>`
     }
 
     span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
         font-size: 1.7vmin;
         color: ${theme.fontColors.button};
-        color: ${(p) => (p.alternativeColor ? theme.buttonColors.primary : null)};
+        color: ${(p) =>
+            p.alternativeColor ? theme.buttonColors.primary : null};
         color: ${(p) => (p.ghostButton ? theme.fontColors.title : null)};
 
         padding: ${(p) => (p.vertical ? p.vertical : "1vh")};

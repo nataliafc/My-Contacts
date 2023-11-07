@@ -35,6 +35,6 @@ export const useErrors = () => {
         return errors.find((error: any) => error.fieldname === fieldname)?.message;
     };
 
-    console.log(errors);
+    // console.log(errors);
     return { setError, removeError, getErrorMessageByFieldName, errors };
 };

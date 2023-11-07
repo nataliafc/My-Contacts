@@ -12,15 +12,15 @@ class ContactsService {
     async listContactById(id: string) {
         return this.httpClient.get(`/contacts/${id}`);
     }
-    async createContact(contact: any) {
-        return this.httpClient.post(`/contacts`, contact);
+    async createContact(body: any) {
+        return this.httpClient.post(`/contacts`, body);
     }
-    async updateContact(id: string) {
-        return this.httpClient.put(`/contacts/${id}`);
-    }
-    async deleteContact(id: string) {
-        return this.httpClient.delete(`/contacts/${id}`);
-    }
+    // async updateContact(id: string) {
+    //     return this.httpClient.put(`/contacts/${id}`);
+    // }
+    // async deleteContact(id: string) {
+    //     return this.httpClient.delete(`/contacts/${id}`);
+    // }
 }
 
 export default new ContactsService();

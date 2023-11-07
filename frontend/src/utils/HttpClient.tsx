@@ -8,43 +8,68 @@ class HttpClient {
         this.baseURL = baseURL;
     }
 
-    async get(path: string) {
+    async makeRequest(path: string, options: any) {
         await delay(1000);
 
-        const response = await fetch(`${this.baseURL}${path}`);
+        const headers = new Headers();
 
-        let body = null;
+        if (options.body) {
+            headers.append("Content-Type", "application/json");
+        }
+
+        if (options.headers) {
+            Object.keys(options.headers).forEach((name) => {
+                headers.append(name, options.headers[name]);
+            });
+        }
+
+        const response = await fetch(`${this.baseURL}${path}`, {
+            method: options.method,
+            body: JSON.stringify(options.body),
+            headers,
+        });
+
+        let responseBody = null;
         const contentType = response.headers.get("Content-Type");
 
         if (contentType?.includes("application/json")) {
-            body = await response.json();
+            responseBody = await response.json();
         }
 
         if (response.ok) {
-            return body;
+            return responseBody;
         }
 
-        throw new APIError(
-            body ? body.error : `${response.status} - ${response.statusText}`
-        );
         // vai lançar um erro que será capturado no catch de onde esse get ta sendo chamado, e não precisa tratar com if/else no try
+        throw new APIError(
+            responseBody
+                ? responseBody.error
+                : `${response.status} - ${response.statusText}`
+        );
     }
 
-    async post(path: string, _contact: any) {
-        const response = await fetch(path);
-        await delay(1000);
-        return response.json();
+    get(path: string) {
+        return this.makeRequest(path, { method: "GET" });
     }
 
-    async delete(id: string) {
-        const response = await fetch(`${this.baseURL}/contacts/${id}`);
-        // await delay(1000);
-        return response.json();
+    post(path: string, body: any) {
+        return this.makeRequest(path, {
+            method: "POST",
+            body,
+        });
     }
-    async put(id: string) {
-        const response = await fetch(`${this.baseURL}/contacts/${id}`);
-        await delay(1000);
-        return response.json();
+
+    put(path: string, id: string, body: any) {
+        return this.makeRequest(`${path}/${id}`, {
+            method: "PUT",
+            body,
+        });
+    }
+
+    delete(path: string, id: string) {
+        return this.makeRequest(`${path}/${id}`, {
+            method: "DELETE",
+        });
     }
 }
 

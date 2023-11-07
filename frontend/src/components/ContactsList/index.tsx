@@ -27,7 +27,8 @@ import {
     TextError,
 } from "./styles";
 import { theme } from "../../assets/styles/theme/default";
-import { FormModal } from "../ModalForm";
+import { CreateContactModal } from "../ModalCreateContact";
+import { EditContactModal } from "../ModalEditContact";
 
 type ContactType = {
     id: string;
@@ -98,6 +99,10 @@ export const ContactsList = () => {
         setContactModalOpen(true);
     }
 
+    function handleOpenNewCategoryModal() {
+        setCategoryModalOpen(true);
+    }
+
     return (
         <StyleSheetManager shouldForwardProp={(text) => isValidProp(text)}>
             <Container>
@@ -125,9 +130,7 @@ export const ContactsList = () => {
                         width="10vw"
                         text="CRIAR CATEGORIA"
                         secondary
-                        onClick={() =>
-                            console.log("abre modal de nova categoria")
-                        }
+                        onClick={handleOpenNewCategoryModal}
                     />
                 </ButtonsContainer>
 
@@ -241,7 +244,12 @@ export const ContactsList = () => {
                     </ErrorContainer>
                 )}
             </Container>
-            <FormModal />
+            {/* <CreateContactModal
+                // isOpen={handleOpenNewContactModal}
+            /> */}
+            {/* <EditContactModal
+                // isOpen={handleOpenNewCategoryModal}
+            /> */}
         </StyleSheetManager>
     );
 };

@@ -32,4 +32,9 @@ export const Input = styled.input<props>`
         color: ${theme.toastColors.error};
         border: 2px solid ${theme.toastColors.error};
     `}
+
+    &[disabled] {
+        border-color: ${theme.buttonColors.disabled};
+        background-color: ${theme.buttonColors.disabled};
+    }
 `;

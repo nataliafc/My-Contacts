@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Button } from "../Button";
-import { FormGroup } from "../FormGroup";
+import { Form } from "./styles";
 import { Input } from "../Input";
 import { Select } from "../Select";
-import { Form } from "./styles";
+import { Button } from "../Button";
+import { FormGroup } from "../FormGroup";
 
 import { useErrors } from "../../hooks/useErrors";
 
@@ -15,39 +15,40 @@ import CategoriesService from "../../services/CategoriesService";
 
 type CategoryType = {
     id: string;
-    name: string
-}
+    name: string;
+};
 
+type ContactsModalType = {
+    onSubmit: any;
+};
 
-export const ContactsForm = ( ) => {
+export const ContactsForm = ({ onSubmit }: ContactsModalType) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [categoryId, setCategoryId] = useState("");
     const [categories, setCategories] = useState([]);
-    const [isLoadingCategories, setIsLoadingCategories] = useState(true)
+    const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { setError, removeError, getErrorMessageByFieldName, errors } = useErrors();
-    const isFormValid = (name && errors.length === 0);
-
+    const { setError, removeError, getErrorMessageByFieldName, errors } =
+        useErrors();
+    const isFormValid = name && errors.length === 0;
 
     const loadCategories = useCallback(async () => {
-
         try {
             const categoriesList = await CategoriesService.listCategories();
-            setCategories(categoriesList)
-            console.log(categoriesList)
-        }
-        catch(error) {
-            console.log(error)
+            setCategories(categoriesList);
+        } catch (error) {
+            console.log(error);
         } finally {
-            setIsLoadingCategories(false)
+            setIsLoadingCategories(false);
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
-        loadCategories()
-    }, [loadCategories])
+        loadCategories();
+    }, [loadCategories]);
 
     const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -73,24 +74,29 @@ export const ContactsForm = ( ) => {
         setPhone(formatPhone(e.target.value));
     };
 
-    const handleSubmit = (e: any) => {
+    async function handleSubmit(e: React.FormEvent<any>) {
         e.preventDefault();
 
-        console.log({
+        setIsSubmitting(true);
+
+        await onSubmit({
             name,
             email,
-            phone: phone.replace(/\D/g, ''),
+            phone: phone.replace(/\D/g, ""),
             categoryId,
         });
-    };
+
+        setIsSubmitting(false);
+    }
 
     return (
         <Form autoComplete="off" onSubmit={handleSubmit}>
-            <FormGroup error={getErrorMessageByFieldName("name")} >
+            <FormGroup error={getErrorMessageByFieldName("name")}>
                 <Input
                     value={name}
                     placeholder="Nome"
                     autoComplete="off"
+                    disabled={isSubmitting}
                     onChange={handleChangeName}
                     error={getErrorMessageByFieldName("name")}
                 />
@@ -102,6 +108,7 @@ export const ContactsForm = ( ) => {
                     value={email}
                     autoComplete="off"
                     placeholder="E-mail"
+                    disabled={isSubmitting}
                     onChange={handleChangeEmail}
                     error={getErrorMessageByFieldName("email")}
                 />
@@ -112,6 +119,7 @@ export const ContactsForm = ( ) => {
                     value={phone}
                     autoComplete="off"
                     placeholder="Telefone"
+                    disabled={isSubmitting}
                     onChange={handleChangePhone}
                     maxLength={15}
                 />
@@ -121,21 +129,24 @@ export const ContactsForm = ( ) => {
                 <Select
                     value={categoryId}
                     onChange={(e) => setCategoryId(e.target.value)}
-                    disabled={isLoadingCategories}
+                    disabled={isLoadingCategories || isSubmitting}
                 >
                     <option value="">Sem categoria</option>
-                    { categories.map((category: CategoryType) => (
-                        <option
-                            key={category.id}
-                            value={category.id}>
-                                {category.name}
+                    {categories.map((category: CategoryType) => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
                         </option>
                     ))}
                 </Select>
             </FormGroup>
 
             <div>
-                <Button type="submit" text="SALVAR ALTERAÇÕES" disabled={!isFormValid}/>
+                <Button
+                    type="submit"
+                    text="SALVAR"
+                    loading={isSubmitting}
+                    disabled={!isFormValid}
+                />
             </div>
         </Form>
     );

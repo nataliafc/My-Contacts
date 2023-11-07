@@ -2,6 +2,7 @@
 import { ButtonHTMLAttributes } from "react";
 
 import { Container } from "./styles";
+import { Spinner } from "../Spinner";
 
 interface Props extends ButtonHTMLAttributes<any> {
     text: string;
@@ -59,9 +60,9 @@ export const Button = ({
             fontSize={fontSize}
         >
             <span
-                style={{  width: '100%', visibility: loading === true ? "hidden" : "visible" }}
+                style={{  width: '100%', visibility: "visible" }}
             >
-                {text}
+               { loading ? <Spinner size={16} /> : text }
             </span>
         </Container>
     );
